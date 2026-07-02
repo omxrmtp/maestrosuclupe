@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { FloatingWidget } from "@/components/FloatingWidget";
 import { PromoPopup } from "@/components/PromoPopup";
 import { Reveal } from "@/components/ui/Reveal";
+import { ServiceJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/components/JsonLd";
 import { SERVICES, SITE } from "@/lib/constants";
 
 type Params = Promise<{ slug: string }>;
@@ -38,12 +39,27 @@ export default async function ServicePage({ params }: { params: Params }) {
   if (!service) notFound();
 
   const otherServices = SERVICES.filter((s) => s.slug !== slug);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://maestrosuclupe.com";
   const whatsappLink = `https://wa.me/${SITE.whatsappRaw}?text=${encodeURIComponent(
     `Hola Maestro Suclupe, deseo más información sobre el servicio de ${service.title}.`,
   )}`;
 
   return (
     <>
+      <ServiceJsonLd
+        slug={service.slug}
+        title={service.title}
+        description={service.metaDescription}
+        image={service.image}
+        benefits={service.benefits}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Inicio", url: `${siteUrl}/` },
+          { name: "Servicios", url: `${siteUrl}/servicios` },
+          { name: service.title, url: `${siteUrl}/servicios/${service.slug}` },
+        ]}
+      />
       <Navbar />
       <main id="main" className="flex-1">
         <section
@@ -236,6 +252,8 @@ export default async function ServicePage({ params }: { params: Params }) {
           </div>
         </section>
 
+        <ServiceFaq service={service} />
+
         <section className="py-16 md:py-20 relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-4xl text-center">
             <Reveal>
@@ -311,5 +329,102 @@ export default async function ServicePage({ params }: { params: Params }) {
       <FloatingWidget />
       <PromoPopup />
     </>
+  );
+}
+
+function faqsForService(slug: string, title: string): { question: string; answer: string }[] {
+  const common = [
+    {
+      question: `¿Cuánto cuesta el ${title}?`,
+      answer: `La consulta inicial es gratuita. El costo del trabajo espiritual de ${title} depende de la complejidad del caso. Te lo confirmo por WhatsApp después de evaluar tu situación, sin compromiso.`,
+    },
+    {
+      question: `¿Cuánto tarda en hacer efecto el ${title}?`,
+      answer: `Los primeros resultados del ${title} suelen manifestarse entre 1 y 21 días, según la complejidad. En casos sencillos, los efectos pueden verse en 24-72 horas.`,
+    },
+    {
+      question: `¿El ${title} funciona a distancia?`,
+      answer: `Sí. El ${title} funciona sin importar la distancia geográfica. Muchos de mis trabajos son para personas en otros países. La energía espiritual no tiene límites físicos.`,
+    },
+  ];
+  const specific: Record<string, { question: string; answer: string }[]> = {
+    "amarres-de-amor": [
+      {
+        question: "¿El amarre de amor es seguro?",
+        answer: "Sí, es totalmente seguro cuando lo realiza un maestro con experiencia. Yo trabajo con 30+ años de práctica, sin causar daño a nadie. El objetivo es unir, no separar.",
+      },
+    ],
+    "retorno-de-pareja": [
+      {
+        question: "¿Y si mi pareja está con otra persona?",
+        answer: "El retorno de pareja funciona incluso cuando hay un tercero. El trabajo espiritual es más fuerte que cualquier relación actual y hace que la persona sienta la necesidad de volver.",
+      },
+    ],
+    "basta-de-sufrir": [
+      {
+        question: "¿Me puede afectar negativamente?",
+        answer: "No. El ritual 'Basta de Sufrir' es un trabajo de liberación y protección. Te ayuda a cerrar el ciclo doloroso y abrirte a relaciones más sanas. No tiene efectos negativos.",
+      },
+    ],
+    "destruyo-al-enemigo": [
+      {
+        question: "¿Esto me puede generar karma negativo?",
+        answer: "No. El ritual 'Destruyo al Enemigo' es justicia espiritual, no venganza. Rompe maleficios y devuelve la paz a la víctima. La persona que envió el mal recibe su propio karma.",
+      },
+    ],
+    "rituales-en-el-cementerio": [
+      {
+        question: "¿Por qué en el cementerio y no en otro lugar?",
+        answer: "Los cementerios tienen una energía espiritual concentrada y directa. Para casos extremos donde los rituales convencionales no son suficientes, este tipo de trabajo tiene una potencia única que logra resultados donde otros métodos fallaron.",
+      },
+    ],
+  };
+  return [...common, ...(specific[slug] ?? [])];
+}
+
+function ServiceFaq({ service }: { service: { slug: string; title: string } }) {
+  const faqs = faqsForService(service.slug, service.title);
+  return (
+    <section className="py-16 md:py-20 relative overflow-hidden bg-black/10">
+      <FaqJsonLd faqs={faqs} />
+      <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-3xl">
+        <Reveal>
+          <h2
+            className="text-3xl md:text-4xl font-heading font-bold text-center mb-3"
+            style={{ color: "var(--accent-color)" }}
+          >
+            Preguntas frecuentes
+          </h2>
+          <div className="section-divider" />
+        </Reveal>
+        <Reveal delay={100}>
+          <div className="mt-10 space-y-3">
+            {faqs.map((f, i) => (
+              <details
+                key={i}
+                className="card-mystic p-5 group cursor-pointer"
+              >
+                <summary className="flex items-center justify-between gap-4 font-heading font-semibold text-white text-base list-none">
+                  <span>{f.question}</span>
+                  <svg
+                    className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180"
+                    style={{ color: "var(--accent-color)" }}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <p className="mt-3 text-gray-300 text-sm md:text-base leading-relaxed">
+                  {f.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+    </section>
   );
 }

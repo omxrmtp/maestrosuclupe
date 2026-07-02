@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cinzel, Lato } from "next/font/google";
 import { SITE } from "@/lib/constants";
+import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/JsonLd";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -19,6 +20,12 @@ const lato = Lato({
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://maestrosuclupe.com";
 
+export const viewport: Viewport = {
+  themeColor: "#0f000d",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -35,9 +42,27 @@ export const metadata: Metadata = {
     "limpieza espiritual",
     "amarres efectivos",
     "peru",
+    "amarres de amor en lima",
+    "retorno de pareja lima",
   ],
   authors: [{ name: SITE.name }],
   creator: SITE.name,
+  publisher: SITE.name,
+  formatDetection: { telephone: true, address: true, email: true },
+  other: {
+    // === Geo meta tags (IETF geo meta) ===
+    "geo.region": "PE-LIM",
+    "geo.placename": "Lima, Peru",
+    "geo.position": "-12.0574916;-77.0309788",
+    ICBM: "-12.0574916, -77.0309788",
+    // === Distribution & geo content signals ===
+    distribution: "global",
+    "content-language": "es-PE",
+    rating: "general",
+    "revisit-after": "7 days",
+    // === AI usage signals (IETF Content Signals draft) ===
+    "content-signal": "ai-train=yes, search=yes, ai-retrieval=yes",
+  },
   openGraph: {
     type: "website",
     locale: "es_PE",
@@ -45,6 +70,7 @@ export const metadata: Metadata = {
     title: SITE.title,
     description: SITE.description,
     url: siteUrl,
+    countryName: "Peru",
   },
   twitter: {
     card: "summary_large_image",
@@ -74,13 +100,15 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
+      lang="es-PE"
       className={`${cinzel.variable} ${lato.variable} h-full antialiased`}
     >
       <body className="min-h-screen flex flex-col">
         <a href="#main" className="skip-link">
           Saltar al contenido principal
         </a>
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
         {children}
       </body>
     </html>
