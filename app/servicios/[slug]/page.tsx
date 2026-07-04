@@ -20,15 +20,29 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { slug } = await params;
   const service = SERVICES.find((s) => s.slug === slug);
   if (!service) return {};
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://maestrosuclupe.com";
+  const pageUrl = `${siteUrl}/servicios/${service.slug}`;
   return {
     title: service.title,
     description: service.metaDescription,
+    other: {
+      "og:locale:alternate": ["es_ES", "es_US"],
+    },
     openGraph: {
       title: `${service.title} | ${SITE.name}`,
       description: service.metaDescription,
       type: "article",
       locale: "es_PE",
       images: [{ url: service.image, alt: service.title }],
+    },
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        "es-PE": pageUrl,
+        "es-ES": pageUrl,
+        "es-US": pageUrl,
+        "x-default": pageUrl,
+      },
     },
   };
 }

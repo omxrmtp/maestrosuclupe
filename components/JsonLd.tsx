@@ -39,7 +39,11 @@ export function OrganizationJsonLd() {
     },
     areaServed: [
       { "@type": "Country", name: "Peru" },
+      { "@type": "Country", name: "Spain" },
+      { "@type": "Country", name: "United States" },
       { "@type": "AdministrativeArea", name: "Lima" },
+      { "@type": "AdministrativeArea", name: "Madrid" },
+      { "@type": "AdministrativeArea", name: "Florida" },
     ],
     knowsAbout: [
       "Amarres de amor",
@@ -92,7 +96,7 @@ export function WebSiteJsonLd() {
     name: SITE.name,
     description: SITE.description,
     url: siteUrl,
-    inLanguage: "es-PE",
+    inLanguage: ["es-PE", "es-ES", "es-US"],
     publisher: {
       "@id": `${siteUrl}#organization`,
     },
@@ -134,7 +138,11 @@ export function ServiceJsonLd({ slug, title, description, image, benefits }: Ser
     provider: {
       "@id": `${siteUrl}#organization`,
     },
-    areaServed: { "@type": "Country", name: "Peru" },
+    areaServed: [
+      { "@type": "Country", name: "Peru" },
+      { "@type": "Country", name: "Spain" },
+      { "@type": "Country", name: "United States" },
+    ],
     serviceType: "Spiritual Consultation",
     category: "Spiritual & Ritual Services",
     offers: {

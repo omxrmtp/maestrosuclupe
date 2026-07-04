@@ -8,16 +8,30 @@ import { PromoPopup } from "@/components/PromoPopup";
 import { Reveal } from "@/components/ui/Reveal";
 import { SERVICES, SITE } from "@/lib/constants";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://maestrosuclupe.com";
+
 export const metadata: Metadata = {
   title: "Servicios",
   description:
-    "Todos los servicios espirituales del Maestro Suclupe: amarres de amor, retorno de pareja, basta de sufrir, destruyo al enemigo y rituales en el cementerio. Más de 30 años de experiencia.",
+    "Todos los servicios espirituales del Maestro Suclupe: amarres de amor, retorno de pareja, basta de sufrir, destruyo al enemigo y rituales en el cementerio. Más de 30 años de experiencia. Atención en Perú, España y Estados Unidos.",
+  other: {
+    "og:locale:alternate": ["es_ES", "es_US"],
+  },
   openGraph: {
     title: `Servicios | ${SITE.name}`,
     description:
       "Servicios espirituales especializados del Maestro Suclupe. Amarre de amor, retorno de pareja, limpieza espiritual y más.",
     type: "website",
     locale: "es_PE",
+  },
+  alternates: {
+    canonical: `${siteUrl}/servicios`,
+    languages: {
+      "es-PE": `${siteUrl}/servicios`,
+      "es-ES": `${siteUrl}/servicios`,
+      "es-US": `${siteUrl}/servicios`,
+      "x-default": `${siteUrl}/servicios`,
+    },
   },
 };
 

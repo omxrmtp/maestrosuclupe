@@ -42,26 +42,33 @@ export const metadata: Metadata = {
     "limpieza espiritual",
     "amarres efectivos",
     "peru",
+    "espana",
+    "estados unidos",
     "amarres de amor en lima",
+    "amarres de amor madrid",
+    "amarres de amor miami",
     "retorno de pareja lima",
+    "retorno de pareja espana",
   ],
   authors: [{ name: SITE.name }],
   creator: SITE.name,
   publisher: SITE.name,
   formatDetection: { telephone: true, address: true, email: true },
   other: {
-    // === Geo meta tags (IETF geo meta) ===
+    // === Geo meta tags (IETF geo meta) — business HQ location ===
     "geo.region": "PE-LIM",
     "geo.placename": "Lima, Peru",
     "geo.position": "-12.0574916;-77.0309788",
     ICBM: "-12.0574916, -77.0309788",
     // === Distribution & geo content signals ===
     distribution: "global",
-    "content-language": "es-PE",
+    "content-language": "es",
     rating: "general",
     "revisit-after": "7 days",
     // === AI usage signals (IETF Content Signals draft) ===
     "content-signal": "ai-train=yes, search=yes, ai-retrieval=yes",
+    // === OpenGraph locale alternates (multi-region: PE, ES, US) ===
+    "og:locale:alternate": ["es_ES", "es_US"],
   },
   openGraph: {
     type: "website",
@@ -89,6 +96,12 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+    languages: {
+      "es-PE": siteUrl,
+      "es-ES": siteUrl,
+      "es-US": siteUrl,
+      "x-default": siteUrl,
+    },
   },
   category: "Spiritual Services",
 };
